@@ -1,3 +1,5 @@
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://fhoeddinghaus.github.io/ClosedGroupFunctions.jl)
+
 # ClosedGroupFunctions
 
 This Julia Package provides basic functions to handle **finite** mathematical groups that are defined by multiplication of a given set of generators.
@@ -20,6 +22,7 @@ This Julia Package provides basic functions to handle **finite** mathematical gr
     ] add git@github.com:Fhoeddinghaus/ClosedGroupFunctions.jl.git
 
 ## Usage
+See the [Documentation](https://fhoeddinghaus.github.io/ClosedGroupFunctions.jl/) for details.
 
 
 ___
