@@ -18,4 +18,4 @@ rm -rf docs
 
 git add --all
 git commit -m "Rebuild GitHub pages"
-git push -f origin gh-pages && git checkout -
+git push -f origin gh-pages && git checkout main
