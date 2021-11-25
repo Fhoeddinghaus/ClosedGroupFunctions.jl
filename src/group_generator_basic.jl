@@ -27,9 +27,11 @@ function group_generator_basic(generators::Array{T}; prnt = false, commutes=fals
         num_multiplications = 0
 
         # calculate the number of multiplications in this level
-        num_max_mult = length(group_current_level) * (length(group_current_level) + length(group_prev_level))
         if !commutes
-            num_max_mult *= 2
+            # in the previouse * current, switch the two elements around -> 2x multiplications
+            num_max_mult = length(group_current_level) * (length(group_current_level) + 2 * length(group_prev_level))
+        else
+            num_max_mult = length(group_current_level) * (length(group_current_level) + length(group_prev_level))
         end
 
         if prnt
@@ -73,16 +75,9 @@ function group_generator_basic(generators::Array{T}; prnt = false, commutes=fals
             for N in group_current_level
                 num_multiplications += 1
                 el = M * N
-                if !commutes
-                    el_reverse = N * M
-                    num_multiplications += 1
-                end
                 
                 #union!(group_next_level, [el]) # slower alternative
                 push!(group_next_level, el)
-                if !commutes && el_reverse != el
-                    push!(group_next_level, el_reverse)
-                end
                 
                 # space optimization was replaced by switching to the Set data-type.
                 #if num_multiplications % 1_000_000 == 0
