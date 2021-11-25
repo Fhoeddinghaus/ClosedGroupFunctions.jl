@@ -72,23 +72,23 @@ As Bijections are slower than Sets and replacing the longer-labeled Pair with th
 """
 function labeled_group_generator_shortest(labeled_generators::Bijection{String, T}; prnt = false, commutes=false)::Tuple{Bijection{String, T}, Int64} where T
 
-    # arrays to store generated elements in different orders of generation
-    group_prev_order = Bijection{String, T}()
-    group_current_order = Bijection(copy(labeled_generators))
-    group_next_order = [1]
+    # arrays to store generated elements in different levels of generation
+    group_prev_level = Bijection{String, T}()
+    group_current_level = Bijection(copy(labeled_generators))
+    group_next_level = [1]
 
-    order = 0
+    level = 0
     size_after = 0
     new_elements = 0
 
     num_all_mult = 0
 
-    while length(group_current_order) > 0
-        order += 1
+    while length(group_current_level) > 0
+        level += 1
         num_multiplications = 0
 
-        # calculate the number of multiplications in this order
-        num_max_mult = length(group_current_order) * (length(group_current_order) + length(group_prev_order))
+        # calculate the number of multiplications in this level
+        num_max_mult = length(group_current_level) * (length(group_current_level) + length(group_prev_level))
         if !commutes
             num_max_mult *= 2
         end
@@ -98,21 +98,21 @@ function labeled_group_generator_shortest(labeled_generators::Bijection{String, 
         end
         
         # empty next for new iteration
-        group_next_order = Bijection{String, T}()
+        group_next_level = Bijection{String, T}()
         
         # 1. multiplicate current with previous and save new elements to next
-        for one in keys(group_prev_order)
-            for two in keys(group_current_order)
+        for one in keys(group_prev_level)
+            for two in keys(group_current_level)
                 num_multiplications += 1
                 
                 # calculate element
-                el = group_prev_order[one] * group_current_order[two]
+                el = group_prev_level[one] * group_current_level[two]
                 # create the new label
                 el_label = one * two
 
                 if !commutes
                     # calculate the reversed element
-                    el_reverse = group_current_order[two] * group_prev_order[one]
+                    el_reverse = group_current_level[two] * group_prev_level[one]
                     # label the reversed element
                     el_reverse_label = two * one
                     num_multiplications += 1
@@ -124,51 +124,51 @@ function labeled_group_generator_shortest(labeled_generators::Bijection{String, 
 
                 # try to store the Pair in the Bijection, fails if key or value is already in Bijection
                 try 
-                    push!(group_next_order, el_pair) 
+                    push!(group_next_level, el_pair) 
                 catch 
                     # value already in Bijection, test if label is shorter
-                    tmp_label = group_next_order(el)
+                    tmp_label = group_next_level(el)
                     if length(el_label) < length(tmp_label)
                         # delete tmp_label, keep new Pair
-                        delete!(group_next_order, tmp_label)
-                        push!(group_next_order, el_pair)
+                        delete!(group_next_level, tmp_label)
+                        push!(group_next_level, el_pair)
                     end
                 end
                 
                 if !commutes && el_reverse != el
                     try 
-                        push!(group_next_order, el_reverse_pair) 
+                        push!(group_next_level, el_reverse_pair) 
                     catch 
                         # value already in Bijection, test if label is shorter
-                        tmp_label = group_next_order(el_reverse)
+                        tmp_label = group_next_level(el_reverse)
                         if length(el_reverse_label) < length(tmp_label)
                             # delete tmp_label, keep new Pair
-                            delete!(group_next_order, tmp_label)
-                            push!(group_next_order, el_reverse_pair)
+                            delete!(group_next_level, tmp_label)
+                            push!(group_next_level, el_reverse_pair)
                         end
                     end
                 end
 
                 if prnt
-                    size_next_order = length(group_next_order)
-                    update!(prog, num_multiplications; showvalues = [(:i,"$num_multiplications/$num_max_mult"),(:order, order),(:size,size_after),(:new_elements, new_elements),(:size_next_order, "$size_next_order ($(size_next_order/num_multiplications * 100)%)")])
+                    size_next_level = length(group_next_level)
+                    update!(prog, num_multiplications; showvalues = [(:i,"$num_multiplications/$num_max_mult"),(:level, level),(:size,size_after),(:new_elements, new_elements),(:size_next_level, "$size_next_level ($(size_next_level/num_multiplications * 100)%)")])
                 end
             end
         end
         
         # 2. multiplicate current with itself
-        for one in keys(group_current_order)
-            for two in keys(group_current_order)
+        for one in keys(group_current_level)
+            for two in keys(group_current_level)
                 num_multiplications += 1
                 
                 # calculate element
-                el = group_current_order[one] * group_current_order[two]
+                el = group_current_level[one] * group_current_level[two]
                 # create the new label
                 el_label = one * two
 
                 if !commutes
                     # calculate the reversed element
-                    el_reverse = group_current_order[two] * group_current_order[one]
+                    el_reverse = group_current_level[two] * group_current_level[one]
                     # label the reversed element
                     el_reverse_label = two * one
                     num_multiplications += 1
@@ -180,34 +180,34 @@ function labeled_group_generator_shortest(labeled_generators::Bijection{String, 
 
                 # try to store the Pair in the Bijection, fails if key or value is already in Bijection
                 try 
-                    push!(group_next_order, el_pair) 
+                    push!(group_next_level, el_pair) 
                 catch 
                     # value already in Bijection, test if label is shorter
-                    tmp_label = group_next_order(el)
+                    tmp_label = group_next_level(el)
                     if length(el_label) < length(tmp_label)
                         # delete tmp_label, keep new Pair
-                        delete!(group_next_order, tmp_label)
-                        push!(group_next_order, el_pair)
+                        delete!(group_next_level, tmp_label)
+                        push!(group_next_level, el_pair)
                     end
                 end
                 
                 if !commutes && el_reverse != el
                     try 
-                        push!(group_next_order, el_reverse_pair) 
+                        push!(group_next_level, el_reverse_pair) 
                     catch 
                         # value already in Bijection, test if label is shorter
-                        tmp_label = group_next_order(el_reverse)
+                        tmp_label = group_next_level(el_reverse)
                         if length(el_reverse_label) < length(tmp_label)
                             # delete tmp_label, keep new Pair
-                            delete!(group_next_order, tmp_label)
-                            push!(group_next_order, el_reverse_pair)
+                            delete!(group_next_level, tmp_label)
+                            push!(group_next_level, el_reverse_pair)
                         end
                     end
                 end
 
                 if prnt
-                    size_next_order = length(group_next_order)
-                    update!(prog, num_multiplications; showvalues = [(:i,"$num_multiplications/$num_max_mult"),(:order, order),(:size,size_after),(:new_elements, new_elements),(:size_next_order, "$size_next_order ($(size_next_order/num_multiplications * 100)%)")])
+                    size_next_level = length(group_next_level)
+                    update!(prog, num_multiplications; showvalues = [(:i,"$num_multiplications/$num_max_mult"),(:level, level),(:size,size_after),(:new_elements, new_elements),(:size_next_level, "$size_next_level ($(size_next_level/num_multiplications * 100)%)")])
                 end
             end
         end
@@ -216,16 +216,16 @@ function labeled_group_generator_shortest(labeled_generators::Bijection{String, 
         
         # current is now done with itself and previous, move to previous
         # union!() doesn't work for Bijections
-        for (el_label, el) in group_current_order
+        for (el_label, el) in group_current_level
             try 
-                push!(group_prev_order, el_label => el) 
+                push!(group_prev_level, el_label => el) 
             catch 
                 # value already in Bijection, test if label is shorter
-                tmp_label = group_prev_order(el)
+                tmp_label = group_prev_level(el)
                 if length(el_label) < length(tmp_label)
                     # delete tmp_label, keep new Pair
-                    delete!(group_prev_order, tmp_label)
-                    push!(group_prev_order, el_label => el)
+                    delete!(group_prev_level, tmp_label)
+                    push!(group_prev_level, el_label => el)
                 end
             end
         end
@@ -235,19 +235,19 @@ function labeled_group_generator_shortest(labeled_generators::Bijection{String, 
         if prnt print("next → current...") end
 
         # move all from next to current that are not in previous
-        # group_current_order = setdiff(group_next_order, group_prev_order)
-        group_current_order = Bijection{String, T}()
-        for (el_label, el) in group_next_order
-            if !(el in values(group_prev_order))
+        # group_current_level = setdiff(group_next_level, group_prev_level)
+        group_current_level = Bijection{String, T}()
+        for (el_label, el) in group_next_level
+            if !(el in values(group_prev_level))
                 # element not in previous, store in current
-                push!(group_current_order, el_label => el)
+                push!(group_current_level, el_label => el)
             else 
                 # element is in previous, but maybe this is shorter
-                tmp_label = group_prev_order(el)
+                tmp_label = group_prev_level(el)
                 if length(el_label) < length(tmp_label)
-                    # delete tmp_label, keep new Pair. next order 
-                    delete!(group_prev_order, tmp_label)
-                    push!(group_prev_order, el_label => el)
+                    # delete tmp_label, keep new Pair. next level 
+                    delete!(group_prev_level, tmp_label)
+                    push!(group_prev_level, el_label => el)
                 end
             end
         end
@@ -255,21 +255,21 @@ function labeled_group_generator_shortest(labeled_generators::Bijection{String, 
         if prnt println(" done.") end
         
         # some stats to display
-        size_after = length(group_prev_order)
-        new_elements = length(group_current_order)
+        size_after = length(group_prev_level)
+        new_elements = length(group_current_level)
         num_all_mult += num_multiplications
-        println("Order #",order," size ", size_after, " and ", new_elements," new elements (",num_multiplications," multiplications)")
+        println("level #",level," size ", size_after, " and ", new_elements," new elements (",num_multiplications," multiplications)")
         if prnt
-            println("Order #",order," size ", size_after, " and ", new_elements," new elements (",num_multiplications," multiplications)")
+            println("level #",level," size ", size_after, " and ", new_elements," new elements (",num_multiplications," multiplications)")
             # countdown to prevent directly overwriting with progressbar
             print("5..."); sleep(1); print("4..."); sleep(1); print("3..."); sleep(1); print("2..."); sleep(1); println("1..."); sleep(1);
         end
     end
     
-    println("\nEnded after ", order, " iterations. \nThe resulting group has ", size_after, " elements.")
+    println("\nEnded after ", level, " iterations. \nThe resulting group has ", size_after, " elements.")
     
     # returns the final group and the number of multiplications needed
-    return group_prev_order, num_all_mult
+    return group_prev_level, num_all_mult
 end
 
 function labeled_group_generator_shortest(generators::Array{T}; prnt = false, commutes=false)::Tuple{Bijection{String, T}, Int64} where T
