@@ -1,5 +1,5 @@
 """
-    is_invariant(class::Vector{Set{String}}, group::Bijection{String, T}, invariant) -> (is_invariant::Bool, values::Vector)
+    is_invariant(class::Set{String}, group::Bijection{String, T}, invariant) -> (is_invariant::Bool, values::Vector)
 
 Verifies that the given function `invariant` is an invariant for a given (conjugacy) class.
 The `class` is given by labels that match the corresponding elements in the Bijection `group`.
