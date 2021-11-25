@@ -1,8 +1,8 @@
 """
     label_generators(generators::Array{T}; alphabet::Vector{Char}) -> labeled_generators::Bijection{String, T}
 
-Labels the given *generators* using the given *alphabet*, a vector of characters and returns the labeled generators.
-The *alphabet* can be bigger than the number of generators, only the first *Ω = length(generators)* characters are used.
+Labels the given `generators` using the given `alphabet`, a vector of characters and returns the labeled generators.
+The `alphabet` can be bigger than the number of generators, only the first `Ω = length(generators)` characters are used.
 """
 function label_generators(generators::Array{T}; alphabet = default_alphabet())::Bijection{String, T} where T
     Ω = length(generators)
@@ -14,6 +14,7 @@ end
     default_alphabet()
 
 Defines a default list of characters that are used to label the generators. Maximum is currently 103 symbols.
+The default alphabet consists of `'a':'z'`, `'A':'Z'`, `'𝒜':'𝒵'` and `'α':'ω'`.
 """
 function default_alphabet()::Vector{Char}
     latin_lc = collect('a':'z')   # 26 symbols
@@ -28,8 +29,8 @@ end
 """
     labeled_group_generator_simple(labeled_generators::Bijection{String, T}, num_max_elements::Int64; prnt = false, commutes=false) -> labeled_group::Bijection{String, T}
 
-Fast Method: Generates all group elements and labels them with the first occuring label. It stops after generating num_max_elements elements. The resulting label may not be the shortest possible label.
-The generators can be given to the function either as a labeled *Bijection{String, T}* or as an unlabeled *Array{T}* that will automatically labeled.
+Fast Method: Generates all group elements and labels them with the first occuring label. It stops after generating `num_max_elements` elements. The resulting label may not be the shortest possible label.
+The generators can be given to the function either as a labeled `Bijection{String, T}` or as an unlabeled `Array{T}` that will automatically labeled.
 
 """
 function labeled_group_generator_simple(labeled_generators::Bijection{String, T}, num_max_elements::Int64; prnt = false, commutes=false)::Bijection{String, T} where T
@@ -65,9 +66,9 @@ end
 """
     labeled_group_generator_shortest(labeled_generators::Bijection{String, T}; prnt = false, commutes=false)::Tuple{Bijection{String, T}, Int64} -> labeled_group::Bijection{String, T}, num_all_mult::Int64
 
-For the general method and description of *prnt* and *commutes* see *group_generator_basic()*.
+For the general method and description of `prnt` and `commutes` see `group_generator_basic()`.
 Slow Method: This method generates all other elements of the closed group and labels them using the shortest possible label.
-As Bijections are slower than Sets and replacing the longer-labeled Pair with the shorter-labeled Pair is time consuming, this method can be really slow compared to *group_generator_basic()*.
+As Bijections are slower than Sets and replacing the longer-labeled Pair with the shorter-labeled Pair is time consuming, this method can be really slow compared to `group_generator_basic()`.
 """
 function labeled_group_generator_shortest(labeled_generators::Bijection{String, T}; prnt = false, commutes=false)::Tuple{Bijection{String, T}, Int64} where T
 

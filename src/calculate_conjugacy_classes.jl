@@ -1,9 +1,9 @@
 """
     calculate_conjugacy_classes(group::Bijection{String, T}; inverse=inv, prnt=true) -> conjugacy_classes::Vector{Set{String}}
 
-Calculate all conjugacy classes {Cl(g) = {h * g * h^{-1} | h ∈ 𝒢} for a given finite, closed group, given the *inverse* function for elements of type *T* in 𝒢.
-The *inverse* function defaults to the Julia *inv* function.
-*prnt* enables/disables output of the class-sizes and remaining elements while computing the classes.
+Calculate all conjugacy classes {Cl(g) = {h * g * h^{-1} | h ∈ 𝒢}} for a given finite, closed group, given the `inverse` function for elements of type `T` in the group `group`.
+The `inverse` function defaults to the Julia `inv` function.
+`prnt` enables/disables output of the class-sizes and remaining elements while computing the classes.
 """
 function calculate_conjugacy_classes(group::Bijection{String, T}; inverse=inv, prnt=true)::Vector{Set{String}} where T
     # store the labels of the conjugacy classes in an Array/Vector of Sets

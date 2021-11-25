@@ -4,9 +4,9 @@
 Calculate all other elements of this closed group by simply multiplying all elements and storing new elements and doing all new multiplications.
 Not very efficient but works. Limit is at above 50_000 elements (one night to calculate).
 
-The *prnt* variable can be used to specify if the programm should output the progressbar. This can slow things down.
+The `prnt` variable can be used to specify if the programm should output the progressbar. This can slow things down.
 
-The *commutes* variable tells the programm if the elements (matrices, numbers, ...) always commute (true) or if the reversed multiplication should be tried (false). 
+The `commutes` variable tells the programm if the elements (matrices, numbers, ...) always commute (true) or if the reversed multiplication should be tried (false). 
 By default the programm does not expect the elements to commute (x2 multiplications)
 """
 function group_generator_basic(generators::Array{T}; prnt = false, commutes=false)::Tuple{Set{T},Int64} where T

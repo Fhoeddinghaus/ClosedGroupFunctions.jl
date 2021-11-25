@@ -21,6 +21,10 @@ This Julia Package provides basic functions to handle **finite** mathematical gr
 ## Installation
     ] add git@github.com:Fhoeddinghaus/ClosedGroupFunctions.jl.git
 
+or
+ 
+    ] add https://github.com/Fhoeddinghaus/ClosedGroupFunctions.jl.git
+
 ## Usage
 See the [Documentation](https://fhoeddinghaus.github.io/ClosedGroupFunctions.jl/) for details.
 

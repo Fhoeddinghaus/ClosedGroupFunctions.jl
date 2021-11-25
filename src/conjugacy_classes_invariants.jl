@@ -1,8 +1,8 @@
 """
     is_invariant(class::Vector{Set{String}}, group::Bijection{String, T}, invariant) -> (is_invariant::Bool, values::Vector)
 
-Verifies that the given function *invariant* is an invariant for a given (conjugacy) class.
-The *class* is given by labels that match the corresponding elements in the Bijection *group*.
+Verifies that the given function `invariant` is an invariant for a given (conjugacy) class.
+The `class` is given by labels that match the corresponding elements in the Bijection `group`.
 """
 function is_invariant(class::Set{String}, group::Bijection{String, T}, invariant; prnt=true)::Tuple{Bool, Vector} where T
     if prnt println("The calculated values of the function '$invariant' are: ") end
@@ -17,8 +17,8 @@ end
 """
     apply_invariant_to_all_in_class(class::Set{String}, group::Bijection{String, T}, invariant; prnt=true) -> values::Vector
 
-Calculates the values of *invariant* for every element of a given *class*.
-The *class* is given by labels that match the corresponding elements in the Bijection *group*.
+Calculates the values of `invariant` for every element of a given `class`.
+The `class` is given by labels that match the corresponding elements in the Bijection `group`.
 """
 function apply_invariant_to_all_in_class(class::Set{String}, group::Bijection{String, T}, invariant; prnt=true)::Vector where T
     values = []
@@ -36,8 +36,8 @@ end
 """
     apply_invariant_to_first_in_class(class::Set{String}, group::Bijection{String, T}, invariant) -> value
 
-Calculates the value of *invariant* for the first element of a given *class*.
-The *class* is given by labels that match the corresponding elements in the Bijection *group*.
+Calculates the value of `invariant` for the first element of a given `class`.
+The `class` is given by labels that match the corresponding elements in the Bijection `group`.
 """
 function apply_invariant_to_first_in_class(class::Set{String}, group::Bijection{String, T}, invariant) where T
     k = first(class)
@@ -48,8 +48,8 @@ end
 """
     apply_invariant_to_first_in_all_classes(conjugacy_classes::Vector{Set{String}}, group::Bijection{String, T}, invariant; prnt=true) -> values::Vector
 
-Calculates the values of *invariant* for the first element of all given *classes*.
-The *conjugacy_classes* are given by Sets of labels that match the corresponding elements in the Bijection *group*.
+Calculates the values of `invariant` for the first element of all given *classes*.
+The `conjugacy_classes` are given by Sets of labels that match the corresponding elements in the Bijection `group`.
 """
 function apply_invariant_to_first_in_all_classes(conjugacy_classes::Vector{Set{String}}, group::Bijection{String, T}, invariant; prnt=true)::Vector where T
     values = []
