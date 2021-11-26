@@ -8,11 +8,14 @@ end
 ```
 
 ## Installation
-    ] add git@github.com:Fhoeddinghaus/ClosedGroupFunctions.jl.git
+```julia
+] add git@github.com:Fhoeddinghaus/ClosedGroupFunctions.jl.git
+```
 
 or 
-
-    ] add https://github.com/Fhoeddinghaus/ClosedGroupFunctions.jl.git
+```julia
+] add https://github.com/Fhoeddinghaus/ClosedGroupFunctions.jl.git
+```
 
 
 ## Contents
