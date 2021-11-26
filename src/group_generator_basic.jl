@@ -11,10 +11,10 @@ By default the programm does not expect the elements to commute (x2 multiplicati
 """
 function group_generator_basic(generators::Array{T}; prnt = false, commutes=false)::Tuple{Set{T},Int64} where T
 
-    # arrays to store generated elements in different levels of generation
+    # Sets to store generated elements in different levels of generation
     group_prev_level = Set([])
     group_current_level = Set(copy(generators))
-    group_next_level = [1]
+    group_next_level = Set([])
 
     level = 0
     size_after = 0

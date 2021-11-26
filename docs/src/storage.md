@@ -15,8 +15,8 @@ If you want to use a specific file extension, just use the `filename_suffix` par
 store_group(identifier, group; filename_prefix = "closed_group_", filename_suffix = "")
 ```
 
-> **Note:**
-> The stored object doesn't need to be a group. It can be used to store specific elements of the group, the labeled group or other arbitrary objects.
+!!! info
+    The stored object doesn't need to be a group. It can be used to store specific elements of the group, the labeled group or other arbitrary objects.
 
 ## Loading a group
 ```@docs

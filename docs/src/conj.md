@@ -26,8 +26,8 @@ The conjugacy classes can be calculated either using Julia's internal `inv()` fu
 calculate_conjugacy_classes(group::Bijection{String, T}; inverse=inv, prnt=true) where T
 ```
 
-> **Note:**
-> Every element occurs only in *one* conjugacy classes. A disjoint union (``\dot\cup``) of all conjugacy classes of ``\mathscr{G}`` yields again ``\mathscr{G}``.
+!!! info
+    Every element occurs only in *one* conjugacy classes. A disjoint union (``\dot\cup``) of all conjugacy classes of ``\mathscr{G}`` yields again ``\mathscr{G}``.
 
 
 ## Investigating classes

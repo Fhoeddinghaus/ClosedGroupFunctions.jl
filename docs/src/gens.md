@@ -25,7 +25,8 @@ A given array of generators of type `T` can be converted to a labeled `Bijection
 label_generators(generators::Array{T}; alphabet = default_alphabet()) where T
 ```
 
-> There the `default_alphabet()` returns an alphabet with 103 possible characters that can be used for labelling (For bigger generator-lists, please use your own character list). The default alphabet consists of `'a':'z'`, `'A':'Z'`, `'𝒜':'𝒵'` and `'α':'ω'`.
+!!! info 
+    There the `default_alphabet()` returns an alphabet with 103 possible characters that can be used for labelling (For bigger generator-lists, please use your own character list). The default alphabet consists of `'a':'z'`, `'A':'Z'`, `'𝒜':'𝒵'` and `'α':'ω'`.
 
 ### Labelling of the group
 There are two functions, that can be used to label the whole group.
