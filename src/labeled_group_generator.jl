@@ -166,17 +166,8 @@ function labeled_group_generator_shortest(labeled_generators::Bijection{String, 
                 # create the new label
                 el_label = one * two
 
-                if !commutes
-                    # calculate the reversed element
-                    el_reverse = group_current_level[two] * group_current_level[one]
-                    # label the reversed element
-                    el_reverse_label = two * one
-                    num_multiplications += 1
-                end
-
                 # create the Pair
                 el_pair = el_label => el
-                el_reverse_pair = el_reverse_label => el_reverse
 
                 # try to store the Pair in the Bijection, fails if key or value is already in Bijection
                 try 
@@ -188,20 +179,6 @@ function labeled_group_generator_shortest(labeled_generators::Bijection{String, 
                         # delete tmp_label, keep new Pair
                         delete!(group_next_level, tmp_label)
                         push!(group_next_level, el_pair)
-                    end
-                end
-                
-                if !commutes && el_reverse != el
-                    try 
-                        push!(group_next_level, el_reverse_pair) 
-                    catch 
-                        # value already in Bijection, test if label is shorter
-                        tmp_label = group_next_level(el_reverse)
-                        if length(el_reverse_label) < length(tmp_label)
-                            # delete tmp_label, keep new Pair
-                            delete!(group_next_level, tmp_label)
-                            push!(group_next_level, el_reverse_pair)
-                        end
                     end
                 end
 
