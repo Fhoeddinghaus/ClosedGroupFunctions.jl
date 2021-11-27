@@ -1,4 +1,4 @@
-[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://fhoeddinghaus.github.io/ClosedGroupFunctions.jl)
+![](https://img.shields.io/badge/julia-v1.6.0-blue)  [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://fhoeddinghaus.github.io/ClosedGroupFunctions.jl)
 
 # ClosedGroupFunctions
 
