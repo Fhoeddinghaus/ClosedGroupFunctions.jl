@@ -33,5 +33,5 @@ See the [Documentation](https://fhoeddinghaus.github.io/ClosedGroupFunctions.jl/
 
 
 ___
-!!! info Remark
-    This package was originally created as a part of the bachelor thesis (2021/22) by Felix Höddinghaus (Fhoeddinghaus).
+> :information_source: **Remark**
+> This package was originally created as a part of the bachelor thesis (2021/22) by Felix Höddinghaus (Fhoeddinghaus).
