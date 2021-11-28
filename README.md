@@ -13,9 +13,9 @@ This Julia Package provides basic functions to handle **finite** mathematical gr
       2. in a slower way (shortest representation)
 3. Calculate the conjugacy classes using a given *inverse* function.
 4. Investigate the (conjugacy) classes - or some other list of labels that describe group elements in a given group - by applying functions (e.g. invariants)
-5. Storage: easy storing and loading a given object (e.g. group, labeled group, conjugacy classes, ...) using *(de)serialize*.
+5. Storage: easy storing and loading a given object (e.g. group, labelled group, conjugacy classes, ...) using *(de)serialize*.
 6. Helper functions
-   1. Simple element calculation by giving any expression consisting of the labeled generators
+   1. Simple element calculation by giving any expression consisting of the labelled generators
 
 
 ## Installation

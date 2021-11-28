@@ -8,8 +8,8 @@ module ClosedGroupFunctions
         group_generator_basic,
 
         label_generators,
-        labeled_group_generator_simple,
-        labeled_group_generator_shortest,
+        labelled_group_generator_simple,
+        labelled_group_generator_shortest,
 
         calculate_conjugacy_classes,
         
@@ -24,7 +24,7 @@ module ClosedGroupFunctions
         group_element_calculate
 
     include("group_generator_basic.jl")
-    include("labeled_group_generator.jl")
+    include("labelled_group_generator.jl")
     include("calculate_conjugacy_classes.jl")
     include("conjugacy_classes_invariants.jl")
     include("storage.jl")

@@ -16,7 +16,7 @@ store_group(identifier, group; filename_prefix = "closed_group_", filename_suffi
 ```
 
 !!! info
-    The stored object doesn't need to be a group. It can be used to store specific elements of the group, the labeled group or other arbitrary objects.
+    The stored object doesn't need to be a group. It can be used to store specific elements of the group, the labelled group or other arbitrary objects.
 
 ## Loading a group
 ```@docs

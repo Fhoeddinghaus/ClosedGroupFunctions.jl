@@ -8,5 +8,5 @@ end
 
 ```@autodocs
 Modules = [ClosedGroupFunctions]
-Pages = ["helpers.jl", "labeled_group_generator.jl"]
+Pages = ["helpers.jl", "labelled_group_generator.jl"]
 ```

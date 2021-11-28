@@ -4,7 +4,7 @@
 Calculate the expression `expr` using the labels defined in `group`. The group `identity_element` is necessary.
 
 Usage:
-1. Let `G` be a labeled group.
+1. Let `G` be a labelled group.
 2. Let `I` be the identity element from `G`.
 3. Define a shorthand: 
     `Gcalc(expr::String) = group_element_calculate(expr, G, I)`

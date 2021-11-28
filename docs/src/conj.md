@@ -31,7 +31,7 @@ calculate_conjugacy_classes(group::Bijection{String, T}; inverse=inv, prnt=true)
 
 
 ## Investigating classes
-Conjugacy classes or any other sub-list of labeled elements of a labeled group can be investigated further by applying functions, here called an `invariant` because of the connection with conjugacy classes and functions, that are constant for a given class (but every function that expects only a group element of type `T` can be used).
+Conjugacy classes or any other sub-list of labelled elements of a labelled group can be investigated further by applying functions, here called an `invariant` because of the connection with conjugacy classes and functions, that are constant for a given class (but every function that expects only a group element of type `T` can be used).
 
 ### Is function invariant?
 ```@docs
