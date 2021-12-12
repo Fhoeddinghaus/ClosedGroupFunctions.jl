@@ -88,7 +88,7 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
         num_multiplications = 0
 
         # calculate the number of multiplications in this level
-        num_max_mult = length(group_current_level) * (length(group_current_level) + length(group_prev_level))
+        num_max_mult = length(group_current_level) * length(labelled_generators)
         if !commutes
             num_max_mult *= 2
         end
@@ -100,8 +100,8 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
         # empty next for new iteration
         group_next_level = Bijection{String, T}()
         
-        # 1. multiplicate current with previous and save new elements to next
-        for one in keys(group_prev_level)
+        # multiplicate current with the generators and save new elements to next
+        for one in keys(labelled_generators)
             for two in keys(group_current_level)
                 num_multiplications += 1
                 
@@ -156,42 +156,9 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
             end
         end
         
-        # 2. multiplicate current with itself
-        for one in keys(group_current_level)
-            for two in keys(group_current_level)
-                num_multiplications += 1
-                
-                # calculate element
-                el = group_current_level[one] * group_current_level[two]
-                # create the new label
-                el_label = one * two
-
-                # create the Pair
-                el_pair = el_label => el
-
-                # try to store the Pair in the Bijection, fails if key or value is already in Bijection
-                try 
-                    push!(group_next_level, el_pair) 
-                catch 
-                    # value already in Bijection, test if label is shorter
-                    tmp_label = group_next_level(el)
-                    if length(el_label) < length(tmp_label)
-                        # delete tmp_label, keep new Pair
-                        delete!(group_next_level, tmp_label)
-                        push!(group_next_level, el_pair)
-                    end
-                end
-
-                if prnt
-                    size_next_level = length(group_next_level)
-                    update!(prog, num_multiplications; showvalues = [(:i,"$num_multiplications/$num_max_mult"),(:level, level),(:size,size_after),(:new_elements, new_elements),(:size_next_level, "$size_next_level ($(size_next_level/num_multiplications * 100)%)")])
-                end
-            end
-        end
-        
         if prnt print("current → prev...") end
         
-        # current is now done with itself and previous, move to previous
+        # current is now done, move to previous
         # union!() doesn't work for Bijections
         for (el_label, el) in group_current_level
             try 

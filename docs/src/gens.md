@@ -10,7 +10,7 @@ end
 Assuming you already have a list of generators of a **finite** group, the group under closure can be calculated with the following functions.
 
 ## Basic generator
-The basic group generator takes an array of generators of type `T` and yields a tuple with a `Set` of all group elements of type `T` and the number of multiplications that were needed to calculate the whole group.
+The basic, very efficient group generator takes an array of generators of type `T` and yields a tuple with a `Set` of all group elements of type `T` and the number of multiplications that were needed to calculate the whole group.
 
 ```@docs
 group_generator_basic(generators::Array{T}; prnt = false, commutes=false) where T

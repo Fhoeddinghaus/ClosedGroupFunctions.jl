@@ -1,8 +1,9 @@
 """
     group_generator_basic(generators::Array{T}; prnt=false, commutes=false) -> Set(group), num_all_mult
 
-Calculate all other elements of this closed group by simply multiplying all elements and storing new elements and doing all new multiplications.
-Not very efficient but works. Limit is at above 50_000 elements (one night to calculate).
+Calculate all other elements of this closed group by multiplying all generators and storing new elements and then multiplying the generators again with the new elements.
+Very efficient with ``O(\\Omega \\cdot N)`` (resp. ``O(2\\cdot \\Omega \\cdot N)``) in the non-commuting case) multiplications. 
+It is the most efficient algorithm for a given set of generators. Only the use of smaller sets of generators can reduce the number of multiplications further.
 
 The `prnt` variable can be used to specify if the programm should output the progressbar. This can slow things down.
 
@@ -41,8 +42,8 @@ function group_generator_basic(generators::Array{T}; prnt = false, commutes=fals
         # empty next for new iteration
         group_next_level = Set([])
         
-        # 1. multiplicate current with previous and save new elements to next
-        for M in group_prev_level
+        # multiplicate current elements with all generators and save new elements to next
+        for M in generators
             for N in group_current_level
                 num_multiplications += 1
                 el = M * N
@@ -63,29 +64,7 @@ function group_generator_basic(generators::Array{T}; prnt = false, commutes=fals
                     #unique!(group_next_level)
                 #end
 
-                if prnt
-                    size_next_level = length(group_next_level)
-                    update!(prog, num_multiplications; showvalues = [(:i,"$num_multiplications/$num_max_mult"),(:level, level),(:size,size_after),(:new_elements, new_elements),(:size_next_level, "$size_next_level ($(size_next_level/num_multiplications * 100)%)")])
-                end
-            end
-        end
-        
-        # 2. multiplicate current with itself
-        for M in group_current_level
-            for N in group_current_level
-                num_multiplications += 1
-                el = M * N
-                
-                #union!(group_next_level, [el]) # slower alternative
-                push!(group_next_level, el)
-                
-                # space optimization was replaced by switching to the Set data-type.
-                #if num_multiplications % 1_000_000 == 0
-                    # free up some space every 1 000 000 iterations (decrease RAM usage from 20+ GB to 2-3 GB)
-                    #unique!(group_next_level)
-                #end
-
-                if prnt
+                if prnt && num_multiplications % 1_000 in [0,1]
                     size_next_level = length(group_next_level)
                     update!(prog, num_multiplications; showvalues = [(:i,"$num_multiplications/$num_max_mult"),(:level, level),(:size,size_after),(:new_elements, new_elements),(:size_next_level, "$size_next_level ($(size_next_level/num_multiplications * 100)%)")])
                 end
@@ -94,7 +73,7 @@ function group_generator_basic(generators::Array{T}; prnt = false, commutes=fals
         
         if prnt print("current → prev...") end
         
-        # current is now done with itself and previous, move to previous
+        # current is now done, move to previous
         union!(group_prev_level, group_current_level)
         
         if prnt println(" done.") end
