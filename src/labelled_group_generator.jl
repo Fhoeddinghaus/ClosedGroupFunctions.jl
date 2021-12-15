@@ -106,13 +106,13 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
                 num_multiplications += 1
                 
                 # calculate element
-                el = group_prev_level[one] * group_current_level[two]
+                el = labelled_generators[one] * group_current_level[two]
                 # create the new label
                 el_label = one * two
 
                 if !commutes
                     # calculate the reversed element
-                    el_reverse = group_current_level[two] * group_prev_level[one]
+                    el_reverse = group_current_level[two] * labelled_generators[one]
                     # label the reversed element
                     el_reverse_label = two * one
                     num_multiplications += 1
