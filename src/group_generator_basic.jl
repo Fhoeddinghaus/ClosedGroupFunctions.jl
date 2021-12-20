@@ -1,16 +1,13 @@
 """
-    group_generator_basic(generators::Array{T}; prnt=false, commutes=false) -> Set(group), num_all_mult
+    group_generator_basic(generators::Array{T}; prnt=false) -> Set(group), num_all_mult
 
 Calculate all other elements of this closed group by multiplying all generators and storing new elements and then multiplying the generators again with the new elements.
-Very efficient with ``O(\\Omega \\cdot N)`` (resp. ``O(2\\cdot \\Omega \\cdot N)``) in the non-commuting case) multiplications. 
+Very efficient with ``O(\\Omega \\cdot N)`` multiplications. 
 It is the most efficient algorithm for a given set of generators. Only the use of smaller sets of generators can reduce the number of multiplications further.
 
 The `prnt` variable can be used to specify if the programm should output the progressbar. This can slow things down.
-
-The `commutes` variable tells the programm if the elements (matrices, numbers, ...) always commute (true) or if the reversed multiplication should be tried (false). 
-By default the programm does not expect the elements to commute (x2 multiplications)
 """
-function group_generator_basic(generators::Array{T}; prnt = false, commutes=false)::Tuple{Set{T},Int64} where T
+function group_generator_basic(generators::Array{T}; prnt = false)::Tuple{Set{T},Int64} where T
 
     # Sets to store generated elements in different levels of generation
     group_prev_level = Set([])
@@ -28,12 +25,7 @@ function group_generator_basic(generators::Array{T}; prnt = false, commutes=fals
         num_multiplications = 0
 
         # calculate the number of multiplications in this level
-        if !commutes
-            # in the previouse * current, switch the two elements around -> 2x multiplications
-            num_max_mult = length(group_current_level) * (length(group_current_level) + 2 * length(group_prev_level))
-        else
-            num_max_mult = length(group_current_level) * (length(group_current_level) + length(group_prev_level))
-        end
+        num_max_mult = length(group_current_level) * (length(group_current_level) + length(group_prev_level))
 
         if prnt
             prog = Progress(num_max_mult)
@@ -47,16 +39,9 @@ function group_generator_basic(generators::Array{T}; prnt = false, commutes=fals
             for N in group_current_level
                 num_multiplications += 1
                 el = M * N
-                if !commutes
-                    el_reverse = N * M
-                    num_multiplications += 1
-                end
                 
                 #union!(group_next_level, [el]) # slower alternative
                 push!(group_next_level, el)
-                if !commutes && el_reverse != el
-                    push!(group_next_level, el_reverse)
-                end
 
                 # space optimization was replaced by switching to the Set data-type.
                 #if num_multiplications % 1_000_000 == 0

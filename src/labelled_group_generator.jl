@@ -27,13 +27,13 @@ end
 
 
 """
-    labelled_group_generator_simple(labelled_generators::Bijection{String, T}, num_max_elements::Int64; prnt = false, commutes=false) -> labelled_group::Bijection{String, T}
+    labelled_group_generator_simple(labelled_generators::Bijection{String, T}, num_max_elements::Int64; prnt = false) -> labelled_group::Bijection{String, T}
 
 Fast Method: Generates all group elements and labels them with the first occuring label. It stops after generating `num_max_elements` elements. The resulting label may not be the shortest possible label.
 The generators can be given to the function either as a labelled `Bijection{String, T}` or as an unlabelled `Array{T}` that will automatically labelled.
 
 """
-function labelled_group_generator_simple(labelled_generators::Bijection{String, T}, num_max_elements::Int64; prnt = false, commutes=false)::Bijection{String, T} where T
+function labelled_group_generator_simple(labelled_generators::Bijection{String, T}, num_max_elements::Int64; prnt = false)::Bijection{String, T} where T
     labelled_group = Bijection(copy(labelled_generators))
     while length(labelled_group) < num_max_elements
         for one in sort(String.(keys(labelled_group))), two in sort(String.(keys(labelled_group)))
@@ -58,19 +58,19 @@ function labelled_group_generator_simple(labelled_generators::Bijection{String, 
     return labelled_group
 end
 
-function labelled_group_generator_simple(generators::Array{T}, num_max_elements::Int64; prnt = false, commutes=false)::Bijection{String, T} where T
+function labelled_group_generator_simple(generators::Array{T}, num_max_elements::Int64; prnt = false)::Bijection{String, T} where T
     labelled_generators = label_generators(generators)
-    return labelled_group_generator_simple(labelled_generators, num_max_elements; prnt, commutes)
+    return labelled_group_generator_simple(labelled_generators, num_max_elements; prnt)
 end
 
 """
-    labelled_group_generator_shortest(labelled_generators::Bijection{String, T}; prnt = false, commutes=false)::Tuple{Bijection{String, T}, Int64} -> labelled_group::Bijection{String, T}, num_all_mult::Int64
+    labelled_group_generator_shortest(labelled_generators::Bijection{String, T}; prnt = false)::Tuple{Bijection{String, T}, Int64} -> labelled_group::Bijection{String, T}, num_all_mult::Int64
 
-For the general method and description of `prnt` and `commutes` see `group_generator_basic()`.
+For the general method and description of `prnt` see `group_generator_basic()`.
 Slow Method: This method generates all other elements of the closed group and labels them using the shortest possible label.
 As Bijections are slower than Sets and replacing the longer-labelled Pair with the shorter-labelled Pair is time consuming, this method can be really slow compared to `group_generator_basic()`.
 """
-function labelled_group_generator_shortest(labelled_generators::Bijection{String, T}; prnt = false, commutes=false)::Tuple{Bijection{String, T}, Int64} where T
+function labelled_group_generator_shortest(labelled_generators::Bijection{String, T}; prnt = false)::Tuple{Bijection{String, T}, Int64} where T
 
     # arrays to store generated elements in different levels of generation
     group_prev_level = Bijection{String, T}()
@@ -89,9 +89,6 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
 
         # calculate the number of multiplications in this level
         num_max_mult = length(group_current_level) * length(labelled_generators)
-        if !commutes
-            num_max_mult *= 2
-        end
 
         if prnt
             prog = Progress(num_max_mult)
@@ -110,17 +107,8 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
                 # create the new label
                 el_label = one * two
 
-                if !commutes
-                    # calculate the reversed element
-                    el_reverse = group_current_level[two] * labelled_generators[one]
-                    # label the reversed element
-                    el_reverse_label = two * one
-                    num_multiplications += 1
-                end
-
                 # create the Pair
                 el_pair = el_label => el
-                el_reverse_pair = el_reverse_label => el_reverse
 
                 # try to store the Pair in the Bijection, fails if key or value is already in Bijection
                 try 
@@ -132,20 +120,6 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
                         # delete tmp_label, keep new Pair
                         delete!(group_next_level, tmp_label)
                         push!(group_next_level, el_pair)
-                    end
-                end
-                
-                if !commutes && el_reverse != el
-                    try 
-                        push!(group_next_level, el_reverse_pair) 
-                    catch 
-                        # value already in Bijection, test if label is shorter
-                        tmp_label = group_next_level(el_reverse)
-                        if length(el_reverse_label) < length(tmp_label)
-                            # delete tmp_label, keep new Pair
-                            delete!(group_next_level, tmp_label)
-                            push!(group_next_level, el_reverse_pair)
-                        end
                     end
                 end
 
@@ -216,7 +190,7 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
     return group_prev_level, num_all_mult
 end
 
-function labelled_group_generator_shortest(generators::Array{T}; prnt = false, commutes=false)::Tuple{Bijection{String, T}, Int64} where T
+function labelled_group_generator_shortest(generators::Array{T}; prnt = false)::Tuple{Bijection{String, T}, Int64} where T
     labelled_generators = label_generators(generators)
-    return labelled_group_generator_shortest(labelled_generators; prnt, commutes)
+    return labelled_group_generator_shortest(labelled_generators; prnt)
 end
