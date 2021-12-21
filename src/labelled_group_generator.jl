@@ -29,7 +29,7 @@ end
 """
     labelled_group_generator_simple(labelled_generators::Bijection{String, T}, num_max_elements::Int64; prnt = false) -> labelled_group::Bijection{String, T}
 
-Fast Method: Generates all group elements and labels them with the first occuring label. It stops after generating `num_max_elements` elements. The resulting label may not be the shortest possible label.
+Naive Method: Generates all group elements and labels them with the first occuring label. It stops after generating `num_max_elements` elements. The resulting label may not be the shortest possible label.
 The generators can be given to the function either as a labelled `Bijection{String, T}` or as an unlabelled `Array{T}` that will automatically labelled.
 
 """
