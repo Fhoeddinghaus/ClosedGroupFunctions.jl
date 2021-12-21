@@ -35,10 +35,11 @@ The generators can be given to the function either as a labelled `Bijection{Stri
 """
 function labelled_group_generator_simple(labelled_generators::Bijection{String, T}, num_max_elements::Int64; prnt = false)::Bijection{String, T} where T
     labelled_group = Bijection(copy(labelled_generators))
+    labelled_generators_keys = sort(String.(keys(labelled_generators)))
     while length(labelled_group) < num_max_elements
-        for one in sort(String.(keys(labelled_group))), two in sort(String.(keys(labelled_group)))
+        for one in labelled_generators_keys, two in sort(String.(keys(labelled_group)))
             # calculate element
-            el = labelled_group[one] * labelled_group[two]
+            el = labelled_generators[one] * labelled_group[two]
             
             # create the new label
             el_label = one * two
