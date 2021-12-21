@@ -67,8 +67,8 @@ end
     labelled_group_generator_shortest(labelled_generators::Bijection{String, T}; prnt = false)::Tuple{Bijection{String, T}, Int64} -> labelled_group::Bijection{String, T}, num_all_mult::Int64
 
 For the general method and description of `prnt` see `group_generator_basic()`.
-Slow Method: This method generates all other elements of the closed group and labels them using the shortest possible label.
-As Bijections are slower than Sets and replacing the longer-labelled Pair with the shorter-labelled Pair is time consuming, this method can be really slow compared to `group_generator_basic()`.
+This method generates all other elements of the closed group and labels them using the lexicographically first appearing (and shortest) label.
+As Bijections are slower than Sets, this method can be really slow compared to `group_generator_basic()`.
 """
 function labelled_group_generator_shortest(labelled_generators::Bijection{String, T}; prnt = false)::Tuple{Bijection{String, T}, Int64} where T
 
@@ -82,6 +82,8 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
     new_elements = 0
 
     num_all_mult = 0
+
+    labelled_generators_keys = sort(String.(keys(labelled_generators)))
 
     while length(group_current_level) > 0
         level += 1
@@ -98,8 +100,8 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
         group_next_level = Bijection{String, T}()
         
         # multiplicate current with the generators and save new elements to next
-        for one in keys(labelled_generators)
-            for two in keys(group_current_level)
+        for one in labelled_generators_keys
+            for two in sort(String.(keys(group_current_level)))
                 num_multiplications += 1
                 
                 # calculate element
@@ -111,17 +113,7 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
                 el_pair = el_label => el
 
                 # try to store the Pair in the Bijection, fails if key or value is already in Bijection
-                try 
-                    push!(group_next_level, el_pair) 
-                catch 
-                    # value already in Bijection, test if label is shorter
-                    tmp_label = group_next_level(el)
-                    if length(el_label) < length(tmp_label)
-                        # delete tmp_label, keep new Pair
-                        delete!(group_next_level, tmp_label)
-                        push!(group_next_level, el_pair)
-                    end
-                end
+                try push!(group_next_level, el_pair) catch end
 
                 if prnt
                     size_next_level = length(group_next_level)
@@ -135,17 +127,7 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
         # current is now done, move to previous
         # union!() doesn't work for Bijections
         for (el_label, el) in group_current_level
-            try 
-                push!(group_prev_level, el_label => el) 
-            catch 
-                # value already in Bijection, test if label is shorter
-                tmp_label = group_prev_level(el)
-                if length(el_label) < length(tmp_label)
-                    # delete tmp_label, keep new Pair
-                    delete!(group_prev_level, tmp_label)
-                    push!(group_prev_level, el_label => el)
-                end
-            end
+            try push!(group_prev_level, el_label => el) catch end
         end
         
         if prnt println(" done.") end
@@ -156,18 +138,11 @@ function labelled_group_generator_shortest(labelled_generators::Bijection{String
         # group_current_level = setdiff(group_next_level, group_prev_level)
         group_current_level = Bijection{String, T}()
         for (el_label, el) in group_next_level
-            if !(el in values(group_prev_level))
+            vals = values(group_prev_level)
+            if !(el in vals)
                 # element not in previous, store in current
                 push!(group_current_level, el_label => el)
-            else 
-                # element is in previous, but maybe this is shorter
-                tmp_label = group_prev_level(el)
-                if length(el_label) < length(tmp_label)
-                    # delete tmp_label, keep new Pair. next level 
-                    delete!(group_prev_level, tmp_label)
-                    push!(group_prev_level, el_label => el)
-                end
-            end
+            end # element is in previous with shorter label
         end
         
         if prnt println(" done.") end
